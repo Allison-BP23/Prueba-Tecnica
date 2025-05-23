@@ -7,6 +7,7 @@ import { PostsService, PurchaseOrder } from '../../services/posts.service';
   templateUrl: './list-orders.component.html',
   styleUrls: ['./list-orders.component.scss']
 })
+
 export class ListOrdersComponent implements OnInit {
   orders: PurchaseOrder[] = [];
 
@@ -18,12 +19,15 @@ export class ListOrdersComponent implements OnInit {
   ngOnInit(): void {
     this.postsService.getPurchaseOrders().subscribe({
       next: (data) => {
-        console.log('Datos recibidos:', data);
         this.orders = data;
       },
       error: (error) => {
-        console.error('Error al cargar órdenes:', error);
+        console.error(error);
       }
     });
+  }
+
+  viewOrder(id: number) {
+    this.router.navigate(['/view-order', id]);
   }
 }

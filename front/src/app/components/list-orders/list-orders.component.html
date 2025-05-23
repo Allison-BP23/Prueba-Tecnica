@@ -19,16 +19,23 @@
         <td>{{ order.PurchaseOrderID }}</td>
         <td>{{ order.EmployeeID }}</td>
         <td>{{ order.VendorID }}</td>
-        <td>{{ order.SubTotal | currency:'USD' }}</td>
-        <td>{{ order.TaxAmt | currency:'USD' }}</td>
-        <td>{{ order.Freight | currency:'USD' }}</td>
-        <td>{{ order.OrderDate | date:'shortDate' }}</td>
+        <td>{{ order.SubTotal | currency : "USD" }}</td>
+        <td>{{ order.TaxAmt | currency : "USD" }}</td>
+        <td>{{ order.Freight | currency : "USD" }}</td>
+        <td>{{ order.OrderDate | date : "shortDate" }}</td>
         <td>
-          <!-- <button (click)="viewOrder(order)">Ver</button> -->
+          <button
+            *ngIf="order.PurchaseOrderID"
+            (click)="viewOrder(order.PurchaseOrderID)"
+          >
+            Ver
+          </button>
         </td>
       </tr>
     </tbody>
   </table>
 
-  <div *ngIf="orders.length === 0" class="no-orders">No hay órdenes disponibles.</div>
+  <div *ngIf="orders.length === 0" class="no-orders">
+    No hay órdenes disponibles.
+  </div>
 </div>

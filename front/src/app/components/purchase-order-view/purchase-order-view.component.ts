@@ -20,12 +20,21 @@ export class PurchaseOrderViewComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-
+    // Captura el parámetro 'id' si existe
+    this.route.paramMap.subscribe(params => {
+      const idParam = params.get('id');
+      if (idParam) {
+        this.orderIdInput = idParam;
+        this.searchOrder(+idParam);  // Busca la orden automáticamente
+      }
+    });
   }
-  searchOrder(): void {
-    const id = Number(this.orderIdInput);
 
-    if (!id || isNaN(id) || id <= 0) {
+  searchOrder(id?: number): void {
+    // Si se recibe un id por parámetro, úsalo. Si no, usa el input.
+    const orderId = id ?? Number(this.orderIdInput);
+
+    if (!orderId || isNaN(orderId) || orderId <= 0) {
       this.message = 'Por favor ingrese un ID válido.';
       this.order = null;
       return;
@@ -34,7 +43,7 @@ export class PurchaseOrderViewComponent implements OnInit {
     this.message = '';
     this.loading = true;
 
-    this.postsService.getPurchaseOrder(id).subscribe({
+    this.postsService.getPurchaseOrder(orderId).subscribe({
       next: (data) => {
         this.order = {
           ...data,
@@ -46,7 +55,7 @@ export class PurchaseOrderViewComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        this.message = `Orden de compra con ID ${id} no encontrada.`;
+        this.message = `Orden de compra con ID ${orderId} no encontrada.`;
         this.order = null;
         this.loading = false;
       },
