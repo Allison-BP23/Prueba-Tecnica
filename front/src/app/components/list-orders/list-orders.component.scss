@@ -1,0 +1,70 @@
+.orders-wrapper {
+  padding: 1rem;
+  background-color: #f9fafb; 
+  color: #1f2937;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+
+  .title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #1e3a8a;
+    font-weight: 600;
+    border-bottom: 2px solid #d1d5db;
+    padding-bottom: 0.5rem;
+  }
+
+  .orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+
+    th, td {
+      text-align: left;
+      padding: 0.75rem 1rem;
+    }
+
+    thead {
+      background-color: #e5e7eb;
+      color: #374151;
+      font-size: 0.9rem;
+      border-bottom: 2px solid #d1d5db;
+    }
+
+    tbody tr {
+      border-top: 1px solid #e5e7eb;
+      transition: background-color 0.2s;
+
+      &:hover {
+        background-color: #f1f5f9;
+      }
+
+      td {
+        font-size: 0.88rem;
+      }
+
+      button {
+        background: none;
+        border: 1px solid #3b82f6;
+        color: #3b82f6;
+        padding: 0.3rem 0.75rem;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.8rem;
+        transition: all 0.2s ease-in-out;
+
+        &:hover {
+          background-color: #3b82f6;
+          color: #ffffff;
+        }
+      }
+    }
+  }
+
+  .no-orders {
+    margin-top: 2rem;
+    color: #6b7280;
+    font-style: italic;
+    text-align: center;
+  }
+}
