@@ -1,0 +1,38 @@
+<h2>Órdenes de Compra</h2>
+
+<table border="1" style="width: 100%; border-collapse: collapse;">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Empleado</th>
+      <th>Proveedor</th>
+      <th>Subtotal</th>
+      <th>Impuestos</th>
+      <th>Flete</th>
+      <th>Fecha de Orden</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let order of orders">
+      <td>{{ order.PurchaseOrderID }}</td>
+      <td>{{ order.EmployeeID }}</td>
+      <td>{{ order.VendorID }}</td>
+      <td>{{ order.SubTotal | currency }}</td>
+      <td>{{ order.TaxAmt | currency }}</td>
+      <td>{{ order.Freight | currency }}</td>
+      <td>{{ order.OrderDate | date:'short' }}</td>
+      <td>
+        <button>Ver</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<div *ngIf="orders.length === 0">No hay órdenes.</div>
+<ul *ngIf="orders.length > 0">
+  <li *ngFor="let order of orders">
+    Orden #{{ order.PurchaseOrderID }} - Estado: {{ order.Status }}
+  </li>
+</ul>
+

@@ -7,6 +7,7 @@ import { PurchaseOrderListComponent } from './components/purchase-order-list/pur
 import { PurchaseOrderFormComponent } from './components/purchase-order-form/purchase-order-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { ListOrdersComponent } from './components/list-orders/list-orders.component';
 
 
 
@@ -14,7 +15,8 @@ import { HttpClientModule } from '@angular/common/http';
   declarations: [
     AppComponent,
     PurchaseOrderListComponent,
-    PurchaseOrderFormComponent
+    PurchaseOrderFormComponent,
+    ListOrdersComponent
   ],
   imports: [
     ReactiveFormsModule,

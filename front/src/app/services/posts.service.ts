@@ -22,7 +22,7 @@ export interface PurchaseOrder {
   providedIn: 'root'
 })
 export class PostsService {
-  private apiUrl = 'http://localhost:5000/purchase-orders';
+  private apiUrl = 'http://127.0.0.1:5000/api/purchase-orders';
 
   constructor(private http: HttpClient) { }
 

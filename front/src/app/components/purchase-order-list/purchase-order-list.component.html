@@ -49,14 +49,16 @@
           <td>{{ order.TaxAmt | currency:'USD':'symbol' }}</td>
           <td>{{ order.Freight | currency:'USD':'symbol' }}</td>
           <td>
-            <a class="btn btn-sm btn-outline-primary me-1"
-               [routerLink]="['/purchase-orders/edit', order.PurchaseOrderID]">
-              Editar
-            </a>
-            <button class="btn btn-sm btn-outline-danger"
-                    (click)="deleteOrder(order.PurchaseOrderID)">
-              Eliminar
-            </button>
+            <div class="d-flex justify-content-center gap-2">
+              <a class="btn btn-sm btn-outline-primary"
+                 [routerLink]="['/purchase-orders/edit', order.PurchaseOrderID]">
+                Editar
+              </a>
+              <button class="btn btn-sm btn-outline-danger"
+                      (click)="deleteOrder(order.PurchaseOrderID)">
+                Eliminar
+              </button>
+            </div>
           </td>
         </tr>
       </tbody>
