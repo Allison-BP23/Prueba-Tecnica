@@ -34,7 +34,7 @@ export class PurchaseOrderFormComponent implements OnInit {
     this.orderId = Number(idParam);
 
     if (!this.orderId || isNaN(this.orderId) || this.orderId <= 0) {
-      this.router.navigate(['/list-orders']);
+      this.router.navigate(['/posts']);
       return;
     }
     

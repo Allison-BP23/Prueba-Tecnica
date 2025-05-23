@@ -5,7 +5,7 @@
   background-color: #ffffff;
   border-radius: 1rem;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
-  font-family: 'Segoe UI', Roboto, sans-serif;
+  font-family: "Segoe UI", Roboto, sans-serif;
   color: #1f2937;
 
   h2 {
@@ -28,7 +28,7 @@
       color: #374151;
     }
 
-    input[type='number'] {
+    input[type="number"] {
       padding: 0.6rem 0.75rem;
       border: 1px solid #d1d5db;
       border-radius: 0.5rem;
@@ -98,6 +98,25 @@
 
       strong {
         color: #374151;
+      }
+    }
+
+    button.btn-danger {
+      margin-top: 10px;
+      background-color: #dc2626;
+      color: #fff;
+      border: none;
+      padding: 0.6rem 1.25rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+      &:hover,
+      &:focus {
+        background-color: #b91c1c;
+        box-shadow: 0 4px 12px rgba(220, 38, 38, 0.5);
       }
     }
   }

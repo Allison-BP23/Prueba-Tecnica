@@ -1,6 +1,7 @@
 from flask import request
 from flask_restful import Resource
 from app.models.purchase_order import PurchaseOrderHeader, db
+from app.models.vendor import Vendor
 from app.schemas.purchase_order_schema import PurchaseOrderSchema
 from datetime import datetime, timezone
 import traceback
@@ -60,12 +61,22 @@ class PurchaseOrderResource(Resource):
             return {"message": f"Error al crear la orden de compra: {str(e)}"}, 500
 
 class PurchaseOrderDetailResource(Resource):
-    def get(self, id):
-        purchase_order = PurchaseOrderHeader.query.get(id)
-        if not purchase_order:
-            return {"message": f"Orden de compra con ID {id} no encontrada"}, 404
-        return purchase_order.to_dict(), 200
+    # def get(self, id):
+    #     purchase_order = PurchaseOrderHeader.query.get(id)
+    #     if not purchase_order:
+    #         return {"message": f"Orden de compra con ID {id} no encontrada"}, 404
+    #     return purchase_order.to_dict(), 200
 
+    def get(self, id):
+        order = PurchaseOrderHeader.query.get(id)
+        if not order:
+            return {'message': 'Purchase order not found'}, 404
+
+        vendor = Vendor.query.get(order.VendorID)
+        item = order.to_dict()
+        item['VendorName'] = vendor.Name if vendor else None
+
+        return item, 200
 
     def put(self, id):
         data = request.get_json()
@@ -113,4 +124,5 @@ class PurchaseOrderDetailResource(Resource):
             return {"message": f"Orden de compra con ID {id} eliminada correctamente"}, 200
         except Exception as e:
             db.session.rollback()
+            print(f"Error al eliminar orden de compra ID {id}: {e}")
             return {"message": f"Error al eliminar la orden de compra: {str(e)}"}, 500
