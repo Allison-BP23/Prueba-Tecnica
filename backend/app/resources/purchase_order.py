@@ -61,3 +61,31 @@ class PurchaseOrderDetailResource(Resource):
         if not purchase_order:
             return {"message": f"Orden de compra con ID {id} no encontrada"}, 404
         return purchase_order.to_dict(), 200
+
+
+    def put(self, id):
+        data = request.get_json()
+        purchase_order = PurchaseOrderHeader.query.get(id)
+        if not purchase_order:
+            return {"message": f"Orden de compra con ID {id} no encontrada"}, 404
+        
+        updatable_fields = ['RevisionNumber', 'Status', 'EmployeeID', 'VendorID', 'ShipMethodID', 'ShipDate', 'SubTotal', 'TaxAmt', 'Freight']
+        
+        for field in updatable_fields:
+            if field in data:
+                if field == 'ShipDate' and data[field]:
+                    try:
+                        setattr(purchase_order, field, datetime.fromisoformat(data[field]))
+                    except ValueError:
+                        return {"message": "Formato inválido para ShipDate. Debe ser ISO 8601."}, 400
+                else:
+                    setattr(purchase_order, field, data[field])
+        
+        purchase_order.ModifiedDate = datetime.utcnow()
+
+        try:
+            db.session.commit()
+            return purchase_order.to_dict(), 200
+        except Exception as e:
+            db.session.rollback()
+            return {"message": f"Error al actualizar la orden de compra: {str(e)}"}, 500
