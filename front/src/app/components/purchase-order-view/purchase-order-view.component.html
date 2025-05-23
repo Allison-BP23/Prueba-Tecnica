@@ -26,6 +26,7 @@
     <p><strong>Status:</strong> {{ order.Status }}</p>
     <p><strong>Employee ID:</strong> {{ order.EmployeeID }}</p>
     <p><strong>Vendor ID:</strong> {{ order.VendorID }}</p>
+    <p><strong>Vendor Name: {{ order.VendorName }}</strong></p>
     <p><strong>Ship Method ID:</strong> {{ order.ShipMethodID }}</p>
     <p><strong>Ship Date:</strong> {{ order.ShipDate | date: 'medium' }}</p>
     <p><strong>SubTotal:</strong> {{ order.SubTotal | currency }}</p>
