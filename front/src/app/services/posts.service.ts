@@ -16,6 +16,7 @@ export interface PurchaseOrder {
   TaxAmt: number;
   Freight: number;
   ModifiedDate?: string;
+  VendorName?: string;
 }
 
 @Injectable({
