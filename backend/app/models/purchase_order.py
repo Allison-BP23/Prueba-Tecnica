@@ -37,7 +37,23 @@ class PurchaseOrderHeader(db.Model):
             raise ValueError(f"{key} no puede ser negativo.")
         return value
 
-# Evento para recalcular TotalDue antes de insertar o actualizar
+    def to_dict(self):
+        return {
+            "PurchaseOrderID": self.PurchaseOrderID,
+            "RevisionNumber": self.RevisionNumber,
+            "Status": self.Status,
+            "EmployeeID": self.EmployeeID,
+            "VendorID": self.VendorID,
+            "ShipMethodID": self.ShipMethodID,
+            "OrderDate": self.OrderDate.isoformat() if self.OrderDate else None,
+            "ShipDate": self.ShipDate.isoformat() if self.ShipDate else None,
+            "SubTotal": float(self.SubTotal),
+            "TaxAmt": float(self.TaxAmt),
+            "Freight": float(self.Freight),
+            "TotalDue": float(self.TotalDue),
+            "ModifiedDate": self.ModifiedDate.isoformat() if self.ModifiedDate else None
+        }
+
 @event.listens_for(PurchaseOrderHeader, 'before_insert')
 @event.listens_for(PurchaseOrderHeader, 'before_update')
 def before_save(mapper, connection, target):
