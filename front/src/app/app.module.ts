@@ -8,6 +8,7 @@ import { PurchaseOrderFormComponent } from './components/purchase-order-form/pur
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ListOrdersComponent } from './components/list-orders/list-orders.component';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -22,7 +23,8 @@ import { ListOrdersComponent } from './components/list-orders/list-orders.compon
     ReactiveFormsModule,
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

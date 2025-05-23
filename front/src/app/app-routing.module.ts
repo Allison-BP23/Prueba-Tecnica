@@ -5,8 +5,10 @@ import { PurchaseOrderFormComponent } from './components/purchase-order-form/pur
 import { ListOrdersComponent } from './components/list-orders/list-orders.component';
 
 const routes: Routes = [
-  { path: 'ordenes', component: ListOrdersComponent },
+  { path: 'orders', component: ListOrdersComponent },
   { path: '', redirectTo: 'ordenes', pathMatch: 'full' }, 
+  { path: 'create_order', component: PurchaseOrderListComponent },
+
 ];
 
 @NgModule({

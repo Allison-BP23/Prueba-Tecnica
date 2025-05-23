@@ -1,71 +1,54 @@
-<div *ngIf="loading" class="text-center text-primary my-4">
-  <div class="spinner-border" role="status"></div>
-  <div>Cargando órdenes...</div>
-</div>
+<div class="create-order-wrapper">
+  <h2 class="title">Crear Nueva Orden de Compra</h2>
 
-<div *ngIf="error" class="alert alert-danger text-center">
-  {{ error }}
-</div>
+  <form (ngSubmit)="createOrder()" #orderForm="ngForm" class="order-form">
+    <label>
+      Revision Number:
+      <input type="number" name="RevisionNumber" [(ngModel)]="order.RevisionNumber" required />
+    </label>
 
-<div class="container mt-4">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="text-dark">Órdenes de Compra</h2>
-    <a class="btn btn-primary" routerLink="/purchase-orders/new">+ Nueva Orden</a>
-  </div>
+    <label>
+      Status:
+      <input type="number" name="Status" [(ngModel)]="order.Status" required />
+    </label>
 
-  <div class="table-responsive" *ngIf="!loading && orders.length">
-    <table class="table table-bordered table-hover align-middle text-center">
-      <thead class="table-dark">
-        <tr>
-          <th>ID</th>
-          <th>Revisión</th>
-          <th>Estado</th>
-          <th>Empleado</th>
-          <th>Proveedor</th>
-          <th>Método Envío</th>
-          <th>Fecha Orden</th>
-          <th>Fecha Envío</th>
-          <th>Subtotal</th>
-          <th>Impuesto</th>
-          <th>Flete</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let order of orders">
-          <td>{{ order.PurchaseOrderID }}</td>
-          <td>{{ order.RevisionNumber }}</td>
-          <td>
-            <span class="badge bg-{{ order.Status === 1 ? 'secondary' : 'info' }}">
-              {{ order.Status }}
-            </span>
-          </td>
-          <td>{{ order.EmployeeID }}</td>
-          <td>{{ order.VendorID }}</td>
-          <td>{{ order.ShipMethodID }}</td>
-          <td>{{ order.OrderDate | date:'short' }}</td>
-          <td>{{ order.ShipDate ? (order.ShipDate | date:'short') : '-' }}</td>
-          <td>{{ order.SubTotal | currency:'USD':'symbol' }}</td>
-          <td>{{ order.TaxAmt | currency:'USD':'symbol' }}</td>
-          <td>{{ order.Freight | currency:'USD':'symbol' }}</td>
-          <td>
-            <div class="d-flex justify-content-center gap-2">
-              <a class="btn btn-sm btn-outline-primary"
-                 [routerLink]="['/purchase-orders/edit', order.PurchaseOrderID]">
-                Editar
-              </a>
-              <button class="btn btn-sm btn-outline-danger"
-                      (click)="deleteOrder(order.PurchaseOrderID)">
-                Eliminar
-              </button>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <label>
+      Employee ID:
+      <input type="number" name="EmployeeID" [(ngModel)]="order.EmployeeID" required />
+    </label>
 
-  <div *ngIf="!loading && !orders.length" class="alert alert-info text-center">
-    No hay órdenes registradas.
-  </div>
+    <label>
+      Vendor ID:
+      <input type="number" name="VendorID" [(ngModel)]="order.VendorID" required />
+    </label>
+
+    <label>
+      Ship Method ID:
+      <input type="number" name="ShipMethodID" [(ngModel)]="order.ShipMethodID" required />
+    </label>
+
+    <label>
+      Ship Date:
+      <input type="datetime-local" name="ShipDate" [(ngModel)]="order.ShipDate" />
+    </label>
+
+    <label>
+      SubTotal:
+      <input type="number" step="0.01" name="SubTotal" [(ngModel)]="order.SubTotal" required />
+    </label>
+
+    <label>
+      Tax Amount:
+      <input type="number" step="0.01" name="TaxAmt" [(ngModel)]="order.TaxAmt" required />
+    </label>
+
+    <label>
+      Freight:
+      <input type="number" step="0.01" name="Freight" [(ngModel)]="order.Freight" required />
+    </label>
+
+    <button type="submit" [disabled]="orderForm.invalid">Crear Orden</button>
+  </form>
+
+  <p class="message" *ngIf="message">{{ message }}</p>
 </div>

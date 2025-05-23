@@ -1,9 +1,8 @@
 from ..db import db
-from datetime import datetime
+from datetime import datetime, timezone
 from sqlalchemy.dialects.mysql import TINYINT
 from sqlalchemy.orm import validates
-from sqlalchemy import event
-from sqlalchemy import event, Computed
+from sqlalchemy import Computed
 
 
 class PurchaseOrderHeader(db.Model):
@@ -28,8 +27,8 @@ class PurchaseOrderHeader(db.Model):
 
     @validates('ShipDate')
     def validate_ship_date(self, key, value):
-        if value and value < datetime.utcnow():
-            raise ValueError("ShipDate no puede ser menor a la fecha actual.")
+        if value and value < datetime.now(timezone.utc):
+            raise ValueError("ShipDate no puede ser menor que la fecha actual")
         return value
 
     @validates('SubTotal', 'TaxAmt', 'Freight')

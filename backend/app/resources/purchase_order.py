@@ -2,7 +2,8 @@ from flask import request
 from flask_restful import Resource
 from app.models.purchase_order import PurchaseOrderHeader, db
 from app.schemas.purchase_order_schema import PurchaseOrderSchema
-from datetime import datetime
+from datetime import datetime, timezone
+import traceback
 
 purchase_order_schema = PurchaseOrderSchema()
 purchase_orders_schema = PurchaseOrderSchema(many=True)
@@ -26,11 +27,12 @@ class PurchaseOrderResource(Resource):
         ship_date = None
         if 'ShipDate' in data and data['ShipDate']:
             try:
-                # Convierte string ISO a datetime
                 ship_date = datetime.fromisoformat(data['ShipDate'])
             except ValueError:
                 return {"message": "Formato inválido para ShipDate. Debe ser ISO 8601."}, 400
-
+            
+            if ship_date < datetime.now(timezone.utc):
+                return {"message": "ShipDate no puede ser menor que la fecha actual."}, 400
         try:
             purchase_order = PurchaseOrderHeader(
                 RevisionNumber = data['RevisionNumber'],
@@ -53,6 +55,8 @@ class PurchaseOrderResource(Resource):
 
         except Exception as e:
             db.session.rollback()
+            traceback.print_exc()  
+
             return {"message": f"Error al crear la orden de compra: {str(e)}"}, 500
 
 class PurchaseOrderDetailResource(Resource):
@@ -68,19 +72,26 @@ class PurchaseOrderDetailResource(Resource):
         purchase_order = PurchaseOrderHeader.query.get(id)
         if not purchase_order:
             return {"message": f"Orden de compra con ID {id} no encontrada"}, 404
-        
+
         updatable_fields = ['RevisionNumber', 'Status', 'EmployeeID', 'VendorID', 'ShipMethodID', 'ShipDate', 'SubTotal', 'TaxAmt', 'Freight']
-        
+
         for field in updatable_fields:
             if field in data:
-                if field == 'ShipDate' and data[field]:
+                if field == 'ShipDate':
+                    if not data[field]:
+                        return {"message": "ShipDate no puede estar vacío."}, 400
                     try:
-                        setattr(purchase_order, field, datetime.fromisoformat(data[field]))
+                        ship_date = datetime.fromisoformat(data[field])
                     except ValueError:
                         return {"message": "Formato inválido para ShipDate. Debe ser ISO 8601."}, 400
+
+                    if ship_date < datetime.now(timezone.utc):
+                        return {"message": "ShipDate no puede ser menor que la fecha actual."}, 400
+
+                    setattr(purchase_order, field, ship_date)
                 else:
                     setattr(purchase_order, field, data[field])
-        
+
         purchase_order.ModifiedDate = datetime.utcnow()
 
         try:
