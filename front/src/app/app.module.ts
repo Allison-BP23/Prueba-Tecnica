@@ -11,24 +11,22 @@ import { ListOrdersComponent } from './components/list-orders/list-orders.compon
 import { FormsModule } from '@angular/forms';
 import { PurchaseOrderViewComponent } from './components/purchase-order-view/purchase-order-view.component';
 
-
-
 @NgModule({
   declarations: [
     AppComponent,
     PurchaseOrderListComponent,
     PurchaseOrderFormComponent,
     ListOrdersComponent,
-    PurchaseOrderViewComponent
+    PurchaseOrderViewComponent,
   ],
   imports: [
     ReactiveFormsModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
