@@ -1,0 +1,17 @@
+<div class="purchase-order-view">
+  <h2>Detalle Orden de Compra #{{ orderId }}</h2>
+
+  <div *ngIf="message" class="alert alert-danger">{{ message }}</div>
+
+  <div *ngIf="order" class="order-details">
+    <p><strong>Revision Number:</strong> {{ order.RevisionNumber }}</p>
+    <p><strong>Status:</strong> {{ order.Status }}</p>
+    <p><strong>Employee ID:</strong> {{ order.EmployeeID }}</p>
+    <p><strong>Vendor ID:</strong> {{ order.VendorID }}</p>
+    <p><strong>Ship Method ID:</strong> {{ order.ShipMethodID }}</p>
+    <p><strong>Ship Date:</strong> {{ order.ShipDate }}</p>
+    <p><strong>SubTotal:</strong> {{ order.SubTotal | currency }}</p>
+    <p><strong>Tax Amount:</strong> {{ order.TaxAmt | currency }}</p>
+    <p><strong>Freight:</strong> {{ order.Freight | currency }}</p>
+  </div>
+</div>
