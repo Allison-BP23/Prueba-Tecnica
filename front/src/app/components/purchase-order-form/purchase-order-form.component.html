@@ -1,41 +1,62 @@
 <!-- src/app/components/purchase-order-form/purchase-order-form.component.html -->
-<form [formGroup]="form" (ngSubmit)="submit()">
-  <div>
-    <label>RevisionNumber</label>
-    <input formControlName="RevisionNumber" type="number" />
-  </div>
-  <div>
-    <label>Status</label>
-    <input formControlName="Status" type="number" />
-  </div>
-  <div>
-    <label>EmployeeID</label>
-    <input formControlName="EmployeeID" type="number" />
-  </div>
-  <div>
-    <label>VendorID</label>
-    <input formControlName="VendorID" type="number" />
-  </div>
-  <div>
-    <label>ShipMethodID</label>
-    <input formControlName="ShipMethodID" type="number" />
-  </div>
-  <div>
-    <label>ShipDate</label>
-    <input formControlName="ShipDate" type="date" />
-  </div>
-  <div>
-    <label>SubTotal</label>
-    <input formControlName="SubTotal" type="number" step="0.01" />
-  </div>
-  <div>
-    <label>TaxAmt</label>
-    <input formControlName="TaxAmt" type="number" step="0.01" />
-  </div>
-  <div>
-    <label>Freight</label>
-    <input formControlName="Freight" type="number" step="0.01" />
-  </div>
-  <button type="submit">{{ isEditMode ? 'Actualizar' : 'Crear' }}</button>
-  <button type="button" routerLink="/purchase-orders">Cancelar</button>
-</form>
+<div class="container mt-4">
+  <h2 class="mb-4 text-dark">
+    {{ isEditMode ? 'Editar Orden de Compra' : 'Nueva Orden de Compra' }}
+  </h2>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="bg-white p-4 rounded shadow-sm">
+    <div class="row g-3">
+      <div class="col-md-4">
+        <label class="form-label">Revision Number</label>
+        <input formControlName="RevisionNumber" type="number" class="form-control" />
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Status</label>
+        <input formControlName="Status" type="number" class="form-control" />
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Employee ID</label>
+        <input formControlName="EmployeeID" type="number" class="form-control" />
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Vendor ID</label>
+        <input formControlName="VendorID" type="number" class="form-control" />
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Método de Envío</label>
+        <input formControlName="ShipMethodID" type="number" class="form-control" />
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Fecha de Envío</label>
+        <input formControlName="ShipDate" type="date" class="form-control" />
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Subtotal</label>
+        <input formControlName="SubTotal" type="number" step="0.01" class="form-control" />
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Impuesto</label>
+        <input formControlName="TaxAmt" type="number" step="0.01" class="form-control" />
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Flete</label>
+        <input formControlName="Freight" type="number" step="0.01" class="form-control" />
+      </div>
+    </div>
+
+    <div class="mt-4 d-flex justify-content-end gap-2">
+      <button type="submit" class="btn btn-primary">
+        {{ isEditMode ? 'Actualizar' : 'Crear' }}
+      </button>
+      <a class="btn btn-outline-secondary" routerLink="/purchase-orders">Cancelar</a>
+    </div>
+  </form>
+</div>
