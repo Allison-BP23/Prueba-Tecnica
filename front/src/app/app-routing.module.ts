@@ -8,6 +8,7 @@ const routes: Routes = [
   { path: 'orders', component: ListOrdersComponent },
   { path: '', redirectTo: 'ordenes', pathMatch: 'full' }, 
   { path: 'create_order', component: PurchaseOrderListComponent },
+  { path: 'edit_order/:id', component: PurchaseOrderFormComponent }
 
 ];
 
