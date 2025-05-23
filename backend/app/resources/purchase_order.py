@@ -8,6 +8,7 @@ purchase_order_schema = PurchaseOrderSchema()
 purchase_orders_schema = PurchaseOrderSchema(many=True)
 
 class PurchaseOrderResource(Resource):
+    
     def get(self):
         orders = PurchaseOrderHeader.query.all()
         result = [order.to_dict() for order in orders]
@@ -22,6 +23,14 @@ class PurchaseOrderResource(Resource):
             if field not in data:
                 return {"message": f"Falta el campo obligatorio: {field}"}, 400
 
+        ship_date = None
+        if 'ShipDate' in data and data['ShipDate']:
+            try:
+                # Convierte string ISO a datetime
+                ship_date = datetime.fromisoformat(data['ShipDate'])
+            except ValueError:
+                return {"message": "Formato inválido para ShipDate. Debe ser ISO 8601."}, 400
+
         try:
             purchase_order = PurchaseOrderHeader(
                 RevisionNumber = data['RevisionNumber'],
@@ -30,7 +39,7 @@ class PurchaseOrderResource(Resource):
                 VendorID = data['VendorID'],
                 ShipMethodID = data['ShipMethodID'],
                 OrderDate = datetime.utcnow(),  
-                ShipDate = data.get('ShipDate'), 
+                ShipDate = ship_date, 
                 SubTotal = data['SubTotal'],
                 TaxAmt = data['TaxAmt'],
                 Freight = data['Freight'],
@@ -45,3 +54,10 @@ class PurchaseOrderResource(Resource):
         except Exception as e:
             db.session.rollback()
             return {"message": f"Error al crear la orden de compra: {str(e)}"}, 500
+
+class PurchaseOrderDetailResource(Resource):
+    def get(self, id):
+        purchase_order = PurchaseOrderHeader.query.get(id)
+        if not purchase_order:
+            return {"message": f"Orden de compra con ID {id} no encontrada"}, 404
+        return purchase_order.to_dict(), 200

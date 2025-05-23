@@ -3,6 +3,8 @@ from datetime import datetime
 from sqlalchemy.dialects.mysql import TINYINT
 from sqlalchemy.orm import validates
 from sqlalchemy import event
+from sqlalchemy import event, Computed
+
 
 class PurchaseOrderHeader(db.Model):
     __tablename__ = 'PurchaseOrderHeader'
@@ -19,11 +21,10 @@ class PurchaseOrderHeader(db.Model):
     SubTotal = db.Column(db.Numeric(18, 2), nullable=False)
     TaxAmt = db.Column(db.Numeric(18, 2), nullable=False)
     Freight = db.Column(db.Numeric(18, 2), nullable=False)
-    TotalDue = db.Column(db.Numeric(18, 2), nullable=False)
-    ModifiedDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
+    
+    TotalDue = db.Column(db.Numeric(18, 2), Computed('SubTotal + TaxAmt + Freight', persisted=True), nullable=False)
 
-    def calculate_total_due(self):
-        self.TotalDue = self.SubTotal + self.TaxAmt + self.Freight
+    ModifiedDate = db.Column(db.DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     @validates('ShipDate')
     def validate_ship_date(self, key, value):
@@ -50,11 +51,6 @@ class PurchaseOrderHeader(db.Model):
             "SubTotal": float(self.SubTotal),
             "TaxAmt": float(self.TaxAmt),
             "Freight": float(self.Freight),
-            "TotalDue": float(self.TotalDue),
+            "TotalDue": float(self.TotalDue) if self.TotalDue is not None else None,
             "ModifiedDate": self.ModifiedDate.isoformat() if self.ModifiedDate else None
         }
-
-@event.listens_for(PurchaseOrderHeader, 'before_insert')
-@event.listens_for(PurchaseOrderHeader, 'before_update')
-def before_save(mapper, connection, target):
-    target.calculate_total_due()
