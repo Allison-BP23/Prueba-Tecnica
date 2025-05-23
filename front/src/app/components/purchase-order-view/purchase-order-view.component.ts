@@ -8,9 +8,11 @@ import { PostsService, PurchaseOrder } from '../../services/posts.service';
   styleUrls: ['./purchase-order-view.component.scss'],
 })
 export class PurchaseOrderViewComponent implements OnInit {
+  orderIdInput: string = '';
+  message: string = '';
   order: PurchaseOrder | null = null;
-  message = '';
-  orderId: number = 0;
+  loading = false;
+
   constructor(
     private postsService: PostsService,
     private route: ActivatedRoute,
@@ -18,30 +20,35 @@ export class PurchaseOrderViewComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.orderId = Number(this.route.snapshot.paramMap.get('id'));
 
-    if (!this.orderId || isNaN(this.orderId) || this.orderId <= 0) {
-      this.message = 'ID de orden inválido.';
-      this.router.navigate(['/list-orders']);
+  }
+  searchOrder(): void {
+    const id = Number(this.orderIdInput);
+
+    if (!id || isNaN(id) || id <= 0) {
+      this.message = 'Por favor ingrese un ID válido.';
+      this.order = null;
       return;
     }
-    this.getOrder();
-  }
-  getOrder(): void {
-    this.postsService.getPurchaseOrder(this.orderId).subscribe({
+
+    this.message = '';
+    this.loading = true;
+
+    this.postsService.getPurchaseOrder(id).subscribe({
       next: (data) => {
         this.order = {
           ...data,
           ShipDate: data.ShipDate
-            ? new Date(data.ShipDate).toLocaleString()
-            : 'No disponible',
+            ? new Date(data.ShipDate).toISOString().slice(0, 16)
+            : null,
         };
         this.message = '';
+        this.loading = false;
       },
       error: (err) => {
-        this.message =
-          err.error?.message || 'No se pudo cargar la orden de compra.';
+        this.message = `Orden de compra con ID ${id} no encontrada.`;
         this.order = null;
+        this.loading = false;
       },
     });
   }

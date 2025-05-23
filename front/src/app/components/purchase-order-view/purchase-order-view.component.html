@@ -1,15 +1,33 @@
-<div class="purchase-order-view">
-  <h2>Detalle Orden de Compra #{{ orderId }}</h2>
+<div class="search-wrapper">
+  <h2>Buscar Orden de Compra</h2>
 
-  <div *ngIf="message" class="alert alert-danger">{{ message }}</div>
+  <form (ngSubmit)="searchOrder()">
+    <label for="orderId">Ingrese ID de la Orden:</label>
+    <input
+      type="number"
+      id="orderId"
+      [(ngModel)]="orderIdInput"
+      name="orderIdInput"
+      min="1"
+      required
+    />
+    <button type="submit" [disabled]="loading">Buscar</button>
+  </form>
 
-  <div *ngIf="order" class="order-details">
+  <div *ngIf="message" class="alert alert-danger mt-2">{{ message }}</div>
+
+  <div *ngIf="loading" class="mt-2">Cargando orden...</div>
+
+  <div *ngIf="order" class="order-details mt-4">
+    <h3>Detalles de la Orden de Compra</h3>
+
+    <p><strong>ID:</strong> {{ order.PurchaseOrderID }}</p>
     <p><strong>Revision Number:</strong> {{ order.RevisionNumber }}</p>
     <p><strong>Status:</strong> {{ order.Status }}</p>
     <p><strong>Employee ID:</strong> {{ order.EmployeeID }}</p>
     <p><strong>Vendor ID:</strong> {{ order.VendorID }}</p>
     <p><strong>Ship Method ID:</strong> {{ order.ShipMethodID }}</p>
-    <p><strong>Ship Date:</strong> {{ order.ShipDate }}</p>
+    <p><strong>Ship Date:</strong> {{ order.ShipDate | date: 'medium' }}</p>
     <p><strong>SubTotal:</strong> {{ order.SubTotal | currency }}</p>
     <p><strong>Tax Amount:</strong> {{ order.TaxAmt | currency }}</p>
     <p><strong>Freight:</strong> {{ order.Freight | currency }}</p>
