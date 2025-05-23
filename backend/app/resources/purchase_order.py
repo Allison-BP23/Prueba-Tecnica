@@ -89,3 +89,17 @@ class PurchaseOrderDetailResource(Resource):
         except Exception as e:
             db.session.rollback()
             return {"message": f"Error al actualizar la orden de compra: {str(e)}"}, 500
+
+
+    def delete(self, id):
+        purchase_order = PurchaseOrderHeader.query.get(id)
+        if not purchase_order:
+            return {"message": f"Orden de compra con ID {id} no encontrada"}, 404
+        
+        try:
+            db.session.delete(purchase_order)
+            db.session.commit()
+            return {"message": f"Orden de compra con ID {id} eliminada correctamente"}, 200
+        except Exception as e:
+            db.session.rollback()
+            return {"message": f"Error al eliminar la orden de compra: {str(e)}"}, 500
