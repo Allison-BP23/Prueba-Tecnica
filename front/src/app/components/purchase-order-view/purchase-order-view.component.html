@@ -31,5 +31,8 @@
     <p><strong>SubTotal:</strong> {{ order.SubTotal | currency }}</p>
     <p><strong>Tax Amount:</strong> {{ order.TaxAmt | currency }}</p>
     <p><strong>Freight:</strong> {{ order.Freight | currency }}</p>
+
+    <button (click)="deleteOrder()" class="btn btn-danger mt-3">Eliminar Orden</button>
+
   </div>
 </div>

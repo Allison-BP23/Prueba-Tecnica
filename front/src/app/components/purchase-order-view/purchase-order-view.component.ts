@@ -20,18 +20,16 @@ export class PurchaseOrderViewComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Captura el parámetro 'id' si existe
     this.route.paramMap.subscribe(params => {
       const idParam = params.get('id');
       if (idParam) {
         this.orderIdInput = idParam;
-        this.searchOrder(+idParam);  // Busca la orden automáticamente
+        this.searchOrder(+idParam); 
       }
     });
   }
 
   searchOrder(id?: number): void {
-    // Si se recibe un id por parámetro, úsalo. Si no, usa el input.
     const orderId = id ?? Number(this.orderIdInput);
 
     if (!orderId || isNaN(orderId) || orderId <= 0) {
@@ -59,6 +57,26 @@ export class PurchaseOrderViewComponent implements OnInit {
         this.order = null;
         this.loading = false;
       },
+    });
+  }
+
+  deleteOrder(): void {
+    if (!this.order || !this.order.PurchaseOrderID) {
+      return;
+    }
+
+    if (!confirm(`¿Seguro que quieres eliminar la orden con ID ${this.order.PurchaseOrderID}?`)) {
+      return;
+    }
+
+    this.postsService.deletePurchaseOrder(this.order.PurchaseOrderID).subscribe({
+      next: () => {
+        alert(`Orden de compra con ID ${this.order?.PurchaseOrderID} eliminada correctamente.`);
+        this.router.navigate(['/list-orders']);
+      },
+      error: (err) => {
+        alert(`Error al eliminar la orden: ${err.message || err.statusText}`);
+      }
     });
   }
 }
