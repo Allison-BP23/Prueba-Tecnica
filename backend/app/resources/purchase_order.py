@@ -2,6 +2,7 @@ from flask import request
 from flask_restful import Resource
 from app.models.purchase_order import PurchaseOrderHeader, db
 from app.schemas.purchase_order_schema import PurchaseOrderSchema
+from datetime import datetime
 
 purchase_order_schema = PurchaseOrderSchema()
 purchase_orders_schema = PurchaseOrderSchema(many=True)
@@ -11,3 +12,36 @@ class PurchaseOrderResource(Resource):
         orders = PurchaseOrderHeader.query.all()
         result = [order.to_dict() for order in orders]
         return result, 200
+    
+    
+    def post(self):
+        data = request.get_json()
+
+        required_fields = ['RevisionNumber', 'Status', 'EmployeeID', 'VendorID', 'ShipMethodID', 'SubTotal', 'TaxAmt', 'Freight']
+        for field in required_fields:
+            if field not in data:
+                return {"message": f"Falta el campo obligatorio: {field}"}, 400
+
+        try:
+            purchase_order = PurchaseOrderHeader(
+                RevisionNumber = data['RevisionNumber'],
+                Status = data['Status'],
+                EmployeeID = data['EmployeeID'],
+                VendorID = data['VendorID'],
+                ShipMethodID = data['ShipMethodID'],
+                OrderDate = datetime.utcnow(),  
+                ShipDate = data.get('ShipDate'), 
+                SubTotal = data['SubTotal'],
+                TaxAmt = data['TaxAmt'],
+                Freight = data['Freight'],
+                ModifiedDate = datetime.utcnow()
+            )
+
+            db.session.add(purchase_order)
+            db.session.commit()
+
+            return purchase_order.to_dict(), 201
+
+        except Exception as e:
+            db.session.rollback()
+            return {"message": f"Error al crear la orden de compra: {str(e)}"}, 500
