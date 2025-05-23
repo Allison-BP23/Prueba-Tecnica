@@ -1,43 +1,69 @@
-<!-- src/app/components/purchase-order-list/purchase-order-list.component.html -->
-<div *ngIf="loading">Cargando órdenes...</div>
-<div *ngIf="error" class="error">{{ error }}</div>
+<div *ngIf="loading" class="text-center text-primary my-4">
+  <div class="spinner-border" role="status"></div>
+  <div>Cargando órdenes...</div>
+</div>
 
-<button routerLink="/purchase-orders/new">Nueva Orden</button>
+<div *ngIf="error" class="alert alert-danger text-center">
+  {{ error }}
+</div>
 
-<table *ngIf="!loading && orders.length" border="1" cellpadding="5" cellspacing="0">
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>RevisionNumber</th>
-      <th>Status</th>
-      <th>EmployeeID</th>
-      <th>VendorID</th>
-      <th>ShipMethodID</th>
-      <th>OrderDate</th>
-      <th>ShipDate</th>
-      <th>SubTotal</th>
-      <th>TaxAmt</th>
-      <th>Freight</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let order of orders">
-      <td>{{ order.PurchaseOrderID }}</td>
-      <td>{{ order.RevisionNumber }}</td>
-      <td>{{ order.Status }}</td>
-      <td>{{ order.EmployeeID }}</td>
-      <td>{{ order.VendorID }}</td>
-      <td>{{ order.ShipMethodID }}</td>
-      <td>{{ order.OrderDate | date:'short' }}</td>
-      <td>{{ order.ShipDate ? (order.ShipDate | date:'short') : '-' }}</td>
-      <td>{{ order.SubTotal | currency }}</td>
-      <td>{{ order.TaxAmt | currency }}</td>
-      <td>{{ order.Freight | currency }}</td>
-      <td>
-        <button [routerLink]="['/purchase-orders/edit', order.PurchaseOrderID]">Editar</button>
-        <button (click)="deleteOrder(order.PurchaseOrderID)">Eliminar</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="text-dark">Órdenes de Compra</h2>
+    <a class="btn btn-primary" routerLink="/purchase-orders/new">+ Nueva Orden</a>
+  </div>
+
+  <div class="table-responsive" *ngIf="!loading && orders.length">
+    <table class="table table-bordered table-hover align-middle text-center">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Revisión</th>
+          <th>Estado</th>
+          <th>Empleado</th>
+          <th>Proveedor</th>
+          <th>Método Envío</th>
+          <th>Fecha Orden</th>
+          <th>Fecha Envío</th>
+          <th>Subtotal</th>
+          <th>Impuesto</th>
+          <th>Flete</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of orders">
+          <td>{{ order.PurchaseOrderID }}</td>
+          <td>{{ order.RevisionNumber }}</td>
+          <td>
+            <span class="badge bg-{{ order.Status === 1 ? 'secondary' : 'info' }}">
+              {{ order.Status }}
+            </span>
+          </td>
+          <td>{{ order.EmployeeID }}</td>
+          <td>{{ order.VendorID }}</td>
+          <td>{{ order.ShipMethodID }}</td>
+          <td>{{ order.OrderDate | date:'short' }}</td>
+          <td>{{ order.ShipDate ? (order.ShipDate | date:'short') : '-' }}</td>
+          <td>{{ order.SubTotal | currency:'USD':'symbol' }}</td>
+          <td>{{ order.TaxAmt | currency:'USD':'symbol' }}</td>
+          <td>{{ order.Freight | currency:'USD':'symbol' }}</td>
+          <td>
+            <a class="btn btn-sm btn-outline-primary me-1"
+               [routerLink]="['/purchase-orders/edit', order.PurchaseOrderID]">
+              Editar
+            </a>
+            <button class="btn btn-sm btn-outline-danger"
+                    (click)="deleteOrder(order.PurchaseOrderID)">
+              Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="!loading && !orders.length" class="alert alert-info text-center">
+    No hay órdenes registradas.
+  </div>
+</div>
